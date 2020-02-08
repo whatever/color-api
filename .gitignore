@@ -1,0 +1,5 @@
+deploy
+*.swp
+*.db
+dist
+*.tar.gz
