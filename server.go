@@ -115,7 +115,6 @@ func main() {
 	})
 
 	http.Handle("/", r)
-	s.ListenAndServe()
 
-	fmt.Println("Finished!")
+	fmt.Println("Finished:", s.ListenAndServe())
 }
