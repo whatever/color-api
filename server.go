@@ -110,7 +110,10 @@ func main() {
 
 	r.HandleFunc("/{color}/favicon.ico", func(w http.ResponseWriter, r *http.Request) {
 		c := ColorFromString(mux.Vars(r)["color"])
-		png.Encode(w, c.Image())
+		fmt.Println("...")
+		if err := png.Encode(w, c.Image()); err != nil {
+			fmt.Println("Failed:", err)
+		}
 	})
 
 	r.HandleFunc("/color", func(w http.ResponseWriter, r *http.Request) {
