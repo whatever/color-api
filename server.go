@@ -98,7 +98,10 @@ func main() {
 
 	r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		c := RandomColor(rand)
-		tmpl.ExecuteTemplate(w, fname, c)
+		fmt.Println("Random color:", c)
+		if err := tmpl.ExecuteTemplate(w, "index.html", c); err != nil {
+			fmt.Println(err)
+		}
 	})
 
 	r.HandleFunc("favicon.ico", func(w http.ResponseWriter, r *http.Request) {
