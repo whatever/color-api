@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"context"
 	"flag"
 	"fmt"
@@ -106,11 +107,20 @@ func main() {
 
 	r.HandleFunc("favicon.ico", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Vanilla favicon.ico...")
+		fmt.Fprintf(w, "...")
 	})
 
 	r.HandleFunc("/{color}/favicon.ico", func(w http.ResponseWriter, r *http.Request) {
 		c := ColorFromString(mux.Vars(r)["color"])
-		fmt.Println("...")
+		fmt.Println(mux.Vars(r)["color"], c)
+
+		buf := new(bytes.Buffer)
+
+		_ = png.Encode(buf, c.Image())
+
+		fmt.Println(len(buf.String()))
+		fmt.Println([]byte(buf.String()))
+
 		if err := png.Encode(w, c.Image()); err != nil {
 			fmt.Println("Failed:", err)
 		}
@@ -119,6 +129,8 @@ func main() {
 	r.HandleFunc("/color", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "%v", RandomColor(rand))
 	})
+
+	// http.NotFound(w ResponseWriter, r *Request)
 
 	http.Handle("/", r)
 
